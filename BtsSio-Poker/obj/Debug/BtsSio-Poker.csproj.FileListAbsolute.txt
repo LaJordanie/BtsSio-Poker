@@ -1,0 +1,6 @@
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\bin\Debug\BtsSio-Poker.exe.config
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\bin\Debug\BtsSio-Poker.exe
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\bin\Debug\BtsSio-Poker.pdb
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\obj\Debug\BtsSio-Poker.csprojResolveAssemblyReference.cache
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\obj\Debug\BtsSio-Poker.exe
+C:\Users\etann\OneDrive\Bureau\Cours\AtelierProfessionnalisation\GIT\BtsSio-Poker\BtsSio-Poker\obj\Debug\BtsSio-Poker.pdb

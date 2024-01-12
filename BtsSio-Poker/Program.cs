@@ -90,7 +90,7 @@ namespace BtsSioPoker
         }
         public static combinaison chercheCombinaison(ref carte[] unJeu)
         {
-            int[] similaire = { 0, 0, 0, 0, 0 }; 
+            int[] similaire = { 0, 0, 0, 0, 0 };
             int c_paire = 0;
             bool paire = false;
             bool doublepaire = false;
@@ -159,7 +159,7 @@ namespace BtsSioPoker
                     b_quint = true;
                 }
             }
-           
+
             if (couleur && !sim_1)
             {
                 return combinaison.COULEUR;
@@ -297,6 +297,7 @@ namespace BtsSioPoker
                 reponse_save = (char)_getche();
                 if (reponse_save == 'O' || reponse_save == 'o')
                 {
+                    Console.Clear();
                     Console.Write("Quelle est votre nom (ou pseudo): ");
                     nom = Console.ReadLine();
                     enregistrerJeu(MonJeu, nom);
@@ -371,53 +372,92 @@ namespace BtsSioPoker
                 c++;
             }
         }
+
+        // chiffre en cesar
+        private static string Encrypt(string input, int shift)
+        {
+            StringBuilder encryptedText = new StringBuilder();
+
+            foreach (char character in input)
+            {
+                if (char.IsLetter(character))
+                {
+                    char start = char.IsUpper(character) ? 'A' : 'a';
+                    encryptedText.Append((char)((character + shift - start) % 26 + start));
+                }
+                else
+                {
+                    encryptedText.Append(character);
+                }
+            }
+
+            return encryptedText.ToString();
+        }
+
+        // dechiffres les données en cesar
+        private static string Decrypt(string input, int shift)
+        {
+            return Encrypt(input, 26 - shift);
+        }
+
         // Enregistre le score dans le txt
         private static void enregistrerJeu(carte[] unJeu, string nom)
         {
             string jeu = "";
             string ligne;
-            char delimitateurs = ';';
-            BinaryWriter f;
+            char delimiters = ' ';
+            BinaryWriter writer;
 
-            f = new BinaryWriter(new FileStream("scores.txt", FileMode.Append, FileAccess.Write));
-            // Ecriture des données dans le fichier
-            
-            for (int i = 0; i < MonJeu.Length; i++)
+            try
             {
-                jeu += "[" + MonJeu[i].valeur + "," + MonJeu[i].famille + "]";
+                // créé ou ouvre le fichier scores.txt
+                writer = new BinaryWriter(new FileStream("scores.txt", FileMode.Append, FileAccess.Write));
+
+                // ecrit les données chiffrer dans le fichier
+                for (int i = 0; i < unJeu.Length; i++)
+                {
+                    jeu += "[" + Encrypt(unJeu[i].valeur.ToString(), 3) + "," + Encrypt(unJeu[i].famille.ToString(), 3) + "]";
+                }
+
+                ligne = Encrypt(nom + delimiters + "{" + jeu + "}", 3);
+                writer.Write(ligne);
+                Console.WriteLine("Encrypted: " + ligne);
+
+                // ferme le fichier
+                writer.Close();
             }
-            ligne = nom + delimitateurs + "{" + jeu + "}";
-            f.Write(ligne);
-            Console.WriteLine(ligne);
-            // Fermeture du fichier
-            f.Close();
+            catch (IOException)
+            {
+                Console.WriteLine("Erreurs d'écriture dans le fichier scores.txt");
+            }
             Console.ReadKey(true);
         }
 
         // Affiche le Scores
         private static void voirScores()
         {
-            BinaryReader f;
-            string pseudo, score;
+            BinaryReader reader;
+            string encryptedData;
 
             try
             {
-                f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
+                // ouvre scores.txt 
+                reader = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
 
-                // Lecture des données tant qu'il y a des données
-                while (f.BaseStream.Position != f.BaseStream.Length)
+                // lit les données chiffrer
+                while (reader.BaseStream.Position != reader.BaseStream.Length)
                 {
-                    pseudo = f.ReadString();
-                    score = f.ReadString();
-                    Console.WriteLine("{0} : {1}", pseudo, score);
+                    encryptedData = reader.ReadString();
+                    string decryptedData = Decrypt(encryptedData, 3);
+                    Console.WriteLine(decryptedData);
                 }
 
-                // Fermeture du fichier
-                f.Close();
+                // ferme le fichier
+                reader.Close();
             }
             catch (IOException)
             {
-                Console.WriteLine("Erreur d'ouverture du fichier scores.txt");
+                Console.WriteLine("Erreurs d'ouverture du fichier scores.txt");
             }
         }
 
@@ -482,6 +522,7 @@ namespace BtsSioPoker
                         break;
                     }
                     if (reponse == '2')
+                        Console.Clear();
                         voirScores();
 
                     if (reponse == '3')
